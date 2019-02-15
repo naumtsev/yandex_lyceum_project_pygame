@@ -14,6 +14,13 @@ player_win = None
 file_img_fon = ['space1.jpg', 'space2.jpg']
 img_fon = pygame.transform.scale(pygame.image.load(random.choice(file_img_fon)), (width, height))
 
+delta = 1
+MYEVENTTYPE = 30
+pygame.time.set_timer(MYEVENTTYPE, 2000)
+
+
+
+
 
 PLAY = True
 running = True
@@ -23,7 +30,10 @@ motion2 = 0
 speed = 20
 w, h = 200, 5
 
-ball_speed = 10
+
+
+
+ball_speed = 1
 
 
 screen = pygame.display.set_mode(size)
@@ -74,11 +84,11 @@ class Ball(pygame.sprite.Sprite):
         global player_win
         global PLAY
 
-        if(self.rect.y < border_size + 5 ):
+        if(self.rect.y <= border_size + 7 ):
             PLAY = False
             player_win = pygame.transform.scale(pygame.image.load('win2.gif'), (int(width / 1.5), int(height / 2.5)))
 
-        if(self.rect.y  + 2 * R >= height - border_size - 5):
+        if(self.rect.y  + 2 * R >= height - border_size - 7):
             PLAY = False
             player_win = pygame.transform.scale(pygame.image.load('win1.gif'), (int(width / 1.5), int(height / 2.5)))
 
@@ -209,7 +219,7 @@ class score_block(pygame.sprite.Sprite):
             self.text_block =  Text_Block(self.rect.x, self.rect.y, str(self.cnt), self.text_color, FONT_SIZE)
 
 
-Ball(R, 300, 300, balls_sprites)
+my = Ball(R, 300, 300, balls_sprites)
 #Ball(R, 400, 400, balls_sprites)
 
 Border(border_size, border_size, width - border_size, border_size)
@@ -234,6 +244,23 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+
+        if event.type == MYEVENTTYPE:
+            if ball_speed + delta <= 15:
+                ball_speed += delta
+                if my.vx > 0:
+                    my.vx = ball_speed
+                else:
+                    my.vy = -ball_speed
+
+                if my.vy > 0:
+                    my.vy = ball_speed
+                else:
+                    my.vy = -ball_speed
+
+
+
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
